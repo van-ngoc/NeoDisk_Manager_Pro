@@ -1,0 +1,24 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=NeoDisk Manager Pro
+GenericName=Gestionnaire de Disques & Partitions
+GenericName[fr]=Gestionnaire de Disques & Partitions
+GenericName[en]=Disk & Partition Manager
+Comment=Gestion de partitions et disques durs avec TurboQuant Stream Engine v4.0
+Comment[fr]=Gestion de partitions et disques durs avec TurboQuant Stream Engine v4.0
+Comment[en]=Disk and partition manager powered by TurboQuant Stream Engine v4.0
+Exec="/home/ngoc/MX3_app/partition_manager/NeoDisk Manager Pro/launch.sh"
+Icon=drive-harddisk
+Terminal=false
+Categories=System;Filesystem;
+Keywords=partition;disk;format;gpt;mbr;ext4;ntfs;fat32;storage;dd;parted;turboquant;
+StartupNotify=true
+StartupWMClass=NeoDiskManagerPro
+Actions=RootMode;
+
+[Desktop Action RootMode]
+Name=Lancer en Mode Administrateur (Root)
+Name[fr]=Lancer en Mode Administrateur (Root)
+Name[en]=Launch in Administrator Mode (Root)
+Exec="/home/ngoc/MX3_app/partition_manager/NeoDisk Manager Pro/launch.sh" --root
