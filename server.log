@@ -1,0 +1,22 @@
+======================================================================
+🚀 NEO DISK MANAGER PRO - TurboQuant Engine v4.0
+======================================================================
+Fonctionnalités & Presets Inclus:
+  • Engine TurboQuant Stream: Input -> Quant -> Hash -> Mux -> Process -> Demux -> Dehash -> Output
+  • Fenêtre Native Desktop: Support X11 & Wayland (PyQt5 / Chromium App / Firefox)
+  • Quantification: Q4, Q6, Q8, F16, F32
+  • Presets Multi-OS: Windows (NTFS, FAT32, exFAT), Linux (EXT4, BTRFS, F2FS, SWAP), macOS (HFS+, APFS), Android
+  • Operations Suite: Monter/Démonter, MBR↔GPT, Cloner, Redimensionner, Label/UUID, Surface Scan, Flags Boot/Hide
+  💡 Conseil: Pour un accès direct et sans restriction aux opérations système bas-niveau (dd/parted/mkfs),
+              exécutez 'sudo /home/ngoc/miniconda3/bin/python3 app.py' dans le terminal.
+======================================================================
+🖥️ Lancement de l'application sur fenêtre native X11 / Wayland...
+ * Serving Flask app 'app'
+ * Debug mode: off
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.1.27:5000
+Press CTRL+C to quit
+Sandboxing disabled by user.
+127.0.0.1 - - [04/Sep/2026 20:59:42] "GET / HTTP/1.1" 200 -
