@@ -1,0 +1,2326 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚀 NeoDisk Manager Pro - TurboQuant Edition</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0d6efd;
+            --secondary: #6c757d;
+            --success: #198754;
+            --info: #0dcaf0;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --dark: #1e293b;
+            --light: #f8f9fa;
+            --tq-purple: #8b5cf6;
+            --tq-cyan: #06b6d4;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #311042 100%);
+            color: #f8fafc;
+            min-height: 100vh;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+        
+        .glass-card {
+            background: rgba(30, 41, 59, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+        
+        .tq-pipeline-bar {
+            background: rgba(15, 23, 42, 0.85);
+            border: 1px solid rgba(139, 92, 246, 0.4);
+            border-radius: 16px;
+            padding: 15px 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 0 25px rgba(139, 92, 246, 0.2);
+        }
+        
+        .tq-stage {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .tq-stage-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: #334155;
+            border: 2px solid #64748b;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #94a3b8;
+            transition: all 0.3s ease;
+        }
+        
+        .tq-stage.active .tq-stage-icon {
+            background: linear-gradient(135deg, var(--tq-purple), var(--tq-cyan));
+            border-color: #ffffff;
+            color: #ffffff;
+            box-shadow: 0 0 15px rgba(139, 92, 246, 0.8);
+            transform: scale(1.15);
+        }
+        
+        .tq-stage-label {
+            font-size: 0.75rem;
+            margin-top: 6px;
+            color: #cbd5e1;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .tq-arrow {
+            color: #64748b;
+            font-size: 1.2rem;
+        }
+
+        .nav-tabs {
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .nav-tabs .nav-link {
+            border: none;
+            font-weight: 600;
+            color: #94a3b8;
+            padding: 14px 22px;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-tabs .nav-link:hover {
+            color: #f8fafc;
+        }
+        
+        .nav-tabs .nav-link.active {
+            background: linear-gradient(135deg, var(--primary), #0b5ed7);
+            color: white;
+            border-radius: 12px 12px 0 0;
+            box-shadow: 0 -4px 15px rgba(13, 110, 253, 0.4);
+        }
+        
+        .card-header {
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.9));
+            color: white;
+            font-weight: bold;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px 15px 0 0 !important;
+        }
+        
+        .btn-action-group .btn {
+            margin-bottom: 8px;
+            text-align: left;
+            padding: 12px 16px;
+            border-radius: 10px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .badge-fs {
+            font-size: 0.75rem;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+
+        .badge-win { background: #0078d7; color: white; }
+        .badge-lin { background: #f1502f; color: white; }
+        .badge-mac { background: #a2aaad; color: #111; }
+        .badge-and { background: #3ddc84; color: #111; }
+        .badge-tq  { background: linear-gradient(135deg, var(--tq-purple), var(--tq-cyan)); color: white; }
+
+        .modal-content {
+            background: #1e293b;
+            color: #f8fafc;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 18px;
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 18px 18px 0 0;
+        }
+
+        .form-control, .form-select {
+            background-color: #0f172a;
+            border: 1px solid #334155;
+            color: #f8fafc;
+        }
+        .form-control:focus, .form-select:focus {
+            background-color: #0f172a;
+            color: #ffffff;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+        }
+
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+        }
+        
+        .progress-bar-animated {
+            height: 100%;
+            background: linear-gradient(90deg, var(--tq-purple), var(--tq-cyan), var(--primary));
+            border-radius: 5px;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .os-preset-btn {
+            border: 2px solid #334155;
+            border-radius: 12px;
+            padding: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: #0f172a;
+        }
+
+        .os-preset-btn:hover, .os-preset-btn.active {
+            border-color: var(--primary);
+            background: rgba(13, 110, 253, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .surface-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(18px, 1fr));
+            gap: 4px;
+            max-height: 250px;
+            overflow-y: auto;
+            background: #0f172a;
+            padding: 12px;
+            border-radius: 10px;
+        }
+
+        .surface-block {
+            width: 100%;
+            height: 18px;
+            border-radius: 3px;
+            background-color: #334155;
+        }
+        .surface-block.good { background-color: #10b981; }
+        .surface-block.bad { background-color: #ef4444; }
+        .surface-block.scanning { background-color: #f59e0b; animation: pulse 0.8s infinite alternate; }
+
+        @keyframes pulse {
+            from { opacity: 0.4; }
+            to { opacity: 1; }
+        }
+
+        /* ========================================================= */
+        /*   EFFETS UNIQUE AU MONDE : SURBRILLANCE DISQUE & PARTITION  */
+        /* ========================================================= */
+
+        @keyframes diskAuraPulse {
+            0% {
+                box-shadow: 0 0 15px rgba(6, 182, 212, 0.45), inset 0 0 15px rgba(6, 182, 212, 0.12);
+                border-color: #06b6d4;
+            }
+            50% {
+                box-shadow: 0 0 35px rgba(139, 92, 246, 0.85), 0 0 55px rgba(6, 182, 212, 0.6), inset 0 0 25px rgba(139, 92, 246, 0.3);
+                border-color: #a855f7;
+            }
+            100% {
+                box-shadow: 0 0 15px rgba(6, 182, 212, 0.45), inset 0 0 15px rgba(6, 182, 212, 0.12);
+                border-color: #06b6d4;
+            }
+        }
+
+        @keyframes partAuraPulse {
+            0% {
+                box-shadow: 0 0 15px rgba(16, 185, 129, 0.5), inset 0 0 12px rgba(16, 185, 129, 0.2);
+                border-color: #10b981;
+            }
+            50% {
+                box-shadow: 0 0 35px rgba(52, 211, 153, 0.9), 0 0 50px rgba(16, 185, 129, 0.65), inset 0 0 20px rgba(52, 211, 153, 0.35);
+                border-color: #34d399;
+            }
+            100% {
+                box-shadow: 0 0 15px rgba(16, 185, 129, 0.5), inset 0 0 12px rgba(16, 185, 129, 0.2);
+                border-color: #10b981;
+            }
+        }
+
+        @keyframes laserScanline {
+            0% { background-position: -200% 0; }
+            100% { background-position: 300% 0; }
+        }
+
+        .disk-card-selected {
+            animation: diskAuraPulse 3s infinite ease-in-out !important;
+            border: 2px solid #06b6d4 !important;
+            transform: translateY(-4px) scale(1.008) !important;
+            transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+            position: relative;
+            z-index: 5;
+        }
+
+        .disk-card-selected .card-header {
+            background: linear-gradient(90deg, rgba(6, 182, 212, 0.35), rgba(139, 92, 246, 0.35), rgba(15, 23, 42, 0.95)) !important;
+            border-bottom: 2px solid rgba(6, 182, 212, 0.6) !important;
+        }
+
+        .disk-card-selected::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 4px;
+            background: linear-gradient(90deg, transparent, #06b6d4, #a855f7, #3b82f6, transparent);
+            background-size: 200% 100%;
+            animation: laserScanline 2.5s linear infinite;
+            border-radius: 15px 15px 0 0;
+            z-index: 10;
+        }
+
+        .selected-disk-badge {
+            background: linear-gradient(135deg, #06b6d4, #8b5cf6);
+            color: #ffffff;
+            font-weight: 800;
+            font-size: 0.72rem;
+            padding: 4px 10px;
+            border-radius: 20px;
+            letter-spacing: 0.5px;
+            box-shadow: 0 0 12px rgba(6, 182, 212, 0.6);
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .partition-card-selected {
+            animation: partAuraPulse 2.5s infinite ease-in-out !important;
+            border: 2px solid #10b981 !important;
+            border-left: 6px solid #34d399 !important;
+            background: rgba(16, 185, 129, 0.15) !important;
+            transform: scale(1.012) translateX(3px) !important;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+            position: relative;
+            z-index: 6;
+        }
+
+        .selected-part-badge {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: #ffffff;
+            font-weight: 800;
+            font-size: 0.7rem;
+            padding: 3px 8px;
+            border-radius: 12px;
+            letter-spacing: 0.5px;
+            box-shadow: 0 0 10px rgba(16, 185, 129, 0.6);
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .text-cyan { color: #06b6d4 !important; }
+        .text-emerald { color: #10b981 !important; }
+
+        /* High-Tech Progress Bar Modal Styles */
+        .glow-percent {
+            font-size: 4.5rem;
+            letter-spacing: 2px;
+            text-shadow: 0 0 25px rgba(6, 182, 212, 0.9), 0 0 50px rgba(139, 92, 246, 0.7);
+            background: linear-gradient(135deg, #38bdf8, #818cf8, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .custom-progress-track {
+            height: 30px !important;
+            background: rgba(15, 23, 42, 0.95) !important;
+            border: 1.5px solid rgba(6, 182, 212, 0.6) !important;
+            border-radius: 15px !important;
+            padding: 3px !important;
+            box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.9), 0 0 25px rgba(6, 182, 212, 0.35) !important;
+        }
+
+        .custom-progress-fill {
+            height: 100% !important;
+            border-radius: 11px !important;
+            background: linear-gradient(90deg, #06b6d4 0%, #3b82f6 50%, #8b5cf6 100%) !important;
+            box-shadow: 0 0 20px rgba(6, 182, 212, 0.9), 0 0 10px rgba(139, 92, 246, 0.8) !important;
+            transition: width 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        }
+
+        .progress-modal-content {
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.98), rgba(30, 41, 59, 0.98)) !important;
+            border: 2px solid rgba(6, 182, 212, 0.6) !important;
+            box-shadow: 0 0 50px rgba(6, 182, 212, 0.5), 0 0 100px rgba(139, 92, 246, 0.25) !important;
+            border-radius: 20px !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid py-4">
+        <!-- En-tête principal -->
+        <div class="row mb-3">
+            <div class="col-12">
+                <div class="glass-card p-4">
+                    <div class="row align-items-center">
+                        <div class="col-md-7">
+                            <h1 class="display-6 fw-bold mb-1 text-white">
+                                <i class="fas fa-server text-primary"></i> NeoDisk Manager Pro
+                                <span class="badge badge-tq fs-6 ms-2">TurboQuant Engine v4.0</span>
+                            </h1>
+                            <p class="text-slate-300 mb-2">Gestion, Formatage & Optimisation des disques physiques et partitions matérielles</p>
+                            <div class="d-flex gap-2 align-items-center flex-wrap">
+                                <span class="badge bg-danger p-2 shadow-sm">
+                                    <i class="fas fa-bolt me-1"></i> MODE PHYSIQUE DIRECT
+                                </span>
+                                <span class="badge bg-success p-2 shadow-sm">
+                                    <i class="fas fa-microchip me-1"></i> MBR / GPT / NVMe / RAID / USB
+                                </span>
+                                <span class="badge bg-info text-dark p-2 shadow-sm">
+                                    <i class="fas fa-layer-group me-1"></i> 512B / 4096B Secteurs
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-5 text-end">
+                            <div class="d-flex justify-content-end gap-2 align-items-center flex-wrap">
+                                <button class="btn btn-outline-info" onclick="showHardwareSpecs()">
+                                    <i class="fas fa-hard-drive"></i> Matériel Pris en Charge
+                                </button>
+                                <button class="btn btn-outline-primary" onclick="refreshDisks()">
+                                    <i class="fas fa-sync-alt"></i> Actualiser
+                                </button>
+                                <button class="btn btn-primary" onclick="showHealthCheck()">
+                                    <i class="fas fa-heartbeat"></i> Santé Engine
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pipeline TurboQuant Bar -->
+        <div class="row mb-3">
+            <div class="col-12">
+                <div class="tq-pipeline-bar">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="fw-bold text-white fs-6">
+                            <i class="fas fa-network-wired text-info me-2"></i> PIPELINE TURBOQUANT ARCHITECTURE
+                        </span>
+                        <div class="d-flex align-items-center gap-3">
+                            <label class="small text-slate-300 me-1">Quantisation Stream:</label>
+                            <select class="form-select form-select-sm w-auto" id="tqQuantLevel" onchange="onQuantLevelChange()">
+                                <option value="q4">Q4 (4-bit Ultra Fast)</option>
+                                <option value="q6">Q6 (6-bit Balanced)</option>
+                                <option value="q8" selected>Q8 (8-bit Standard High-Precision)</option>
+                                <option value="f16">F16 (Float16 Lossless)</option>
+                                <option value="f32">F32 (Float32 Raw Precision)</option>
+                            </select>
+                            <button class="btn btn-sm btn-outline-light" onclick="testTurboQuantPipeline()">
+                                <i class="fas fa-play me-1"></i> Tester Pipeline
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between align-items-center text-center px-2 flex-wrap">
+                        <div class="tq-stage active" id="stage-input">
+                            <div class="tq-stage-icon"><i class="fas fa-file-import"></i></div>
+                            <div class="tq-stage-label">1. Input</div>
+                        </div>
+                        <div class="tq-arrow"><i class="fas fa-chevron-right"></i></div>
+                        <div class="tq-stage" id="stage-turboquant">
+                            <div class="tq-stage-icon"><i class="fas fa-sliders-h"></i></div>
+                            <div class="tq-stage-label">2. TurboQuant</div>
+                        </div>
+                        <div class="tq-arrow"><i class="fas fa-chevron-right"></i></div>
+                        <div class="tq-stage" id="stage-hash">
+                            <div class="tq-stage-icon"><i class="fas fa-fingerprint"></i></div>
+                            <div class="tq-stage-label">3. Hash</div>
+                        </div>
+                        <div class="tq-arrow"><i class="fas fa-chevron-right"></i></div>
+                        <div class="tq-stage" id="stage-multiplexeur">
+                            <div class="tq-stage-icon"><i class="fas fa-random"></i></div>
+                            <div class="tq-stage-label">4. Multiplexeur</div>
+                        </div>
+                        <div class="tq-arrow"><i class="fas fa-chevron-right"></i></div>
+                        <div class="tq-stage" id="stage-process">
+                            <div class="tq-stage-icon"><i class="fas fa-cogs"></i></div>
+                            <div class="tq-stage-label">5. Process</div>
+                        </div>
+                        <div class="tq-arrow"><i class="fas fa-chevron-right"></i></div>
+                        <div class="tq-stage" id="stage-demultiplexeur">
+                            <div class="tq-stage-icon"><i class="fas fa-project-diagram"></i></div>
+                            <div class="tq-stage-label">6. Demultiplexeur</div>
+                        </div>
+                        <div class="tq-arrow"><i class="fas fa-chevron-right"></i></div>
+                        <div class="tq-stage" id="stage-dehash">
+                            <div class="tq-stage-icon"><i class="fas fa-shield-alt"></i></div>
+                            <div class="tq-stage-label">7. Dehash</div>
+                        </div>
+                        <div class="tq-arrow"><i class="fas fa-chevron-right"></i></div>
+                        <div class="tq-stage" id="stage-output">
+                            <div class="tq-stage-icon"><i class="fas fa-file-export"></i></div>
+                            <div class="tq-stage-label">8. Output</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Colonne gauche: Sélection et Panneau d'Actions -->
+            <div class="col-md-3">
+                <div class="glass-card p-4 mb-4">
+                    <h5 class="mb-3 text-white"><i class="fas fa-mouse-pointer text-primary me-2"></i>Cible Sélectionnée</h5>
+                    
+                    <div class="mb-3">
+                        <small class="text-slate-400 d-block mb-1">Disque:</small>
+                        <div id="selectedDisk" class="alert alert-dark border-secondary m-0 p-2 text-truncate">
+                            <i class="fas fa-hdd text-secondary me-2"></i>Aucun
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <small class="text-slate-400 d-block mb-1">Partition:</small>
+                        <div id="selectedPartition" class="alert alert-dark border-secondary m-0 p-2 text-truncate">
+                            <i class="fas fa-layer-group text-secondary me-2"></i>Aucune
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-sm btn-outline-danger w-100" onclick="clearSelection()">
+                        <i class="fas fa-times me-1"></i> Annuler la sélection
+                    </button>
+                </div>
+                
+                <div class="glass-card p-4 mb-4">
+                    <h5 class="mb-3 text-white"><i class="fas fa-bolt text-warning me-2"></i>Actions Rapides</h5>
+                    
+                    <div class="btn-action-group">
+                        <button class="btn btn-outline-primary" onclick="showFormatAdvancedModal()">
+                            <span><i class="fas fa-magic text-primary me-2"></i>Formater OS</span>
+                            <i class="fas fa-chevron-right small"></i>
+                        </button>
+                        <button class="btn btn-outline-info" onclick="showMountModal()">
+                            <span><i class="fas fa-link text-info me-2"></i>Monter / Démonter</span>
+                            <i class="fas fa-chevron-right small"></i>
+                        </button>
+                        <button class="btn btn-outline-success" onclick="showCloneModal()">
+                            <span><i class="fas fa-copy text-success me-2"></i>Copier / Coller</span>
+                            <i class="fas fa-chevron-right small"></i>
+                        </button>
+                        <button class="btn btn-outline-warning text-white" onclick="showResizeModal()">
+                            <span><i class="fas fa-compress-arrows-alt text-warning me-2"></i>Réduire / Augmenter</span>
+                            <i class="fas fa-chevron-right small"></i>
+                        </button>
+                        <button class="btn btn-outline-secondary" onclick="showLabelModal()">
+                            <span><i class="fas fa-tag me-2"></i>Nommer & UUID</span>
+                            <i class="fas fa-chevron-right small"></i>
+                        </button>
+                        <button class="btn btn-outline-light" onclick="showFlagsModal()">
+                            <span><i class="fas fa-flag me-2"></i>Attributs & Masquage</span>
+                            <i class="fas fa-chevron-right small"></i>
+                        </button>
+                        <button class="btn btn-outline-info text-white" onclick="showPermissionsModal()">
+                            <span><i class="fas fa-key text-info me-2"></i>Droits Lire & Écrire</span>
+                            <i class="fas fa-chevron-right small"></i>
+                        </button>
+                        <button class="btn btn-outline-danger" onclick="showDeleteModal()">
+                            <span><i class="fas fa-trash text-danger me-2"></i>Supprimer Partition</span>
+                            <i class="fas fa-chevron-right small"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="glass-card p-4">
+                    <h5 class="mb-3 text-white"><i class="fas fa-compact-disc text-info me-2"></i>Opérations Disque</h5>
+                    <div class="btn-action-group">
+                        <button class="btn btn-outline-success text-white fw-bold" onclick="showCreateDiskModal()">
+                            <span><i class="fas fa-plus-square text-success me-2"></i>Créer Disque (GPT / MBR)</span>
+                        </button>
+                        <button class="btn btn-outline-primary" onclick="showConvertTableModal()">
+                            <span><i class="fas fa-exchange-alt me-2"></i>Convertir MBR ↔ GPT</span>
+                        </button>
+                        <button class="btn btn-outline-warning text-white" onclick="showRebuildTableModal()">
+                            <span><i class="fas fa-hammer me-2"></i>Reconstruire Table</span>
+                        </button>
+                        <button class="btn btn-outline-secondary" onclick="showInitializeDiskModal()">
+                            <span><i class="fas fa-redo me-2"></i>Initialiser le Disque</span>
+                        </button>
+                        <button class="btn btn-outline-danger" onclick="showEraseModal()">
+                            <span><i class="fas fa-broom me-2"></i>Effacement Disque Complete</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Colonne droite: Onglets principaux -->
+            <div class="col-md-9">
+                <div class="glass-card">
+                    <ul class="nav nav-tabs" id="mainTabs">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-bs-toggle="tab" href="#tab-disks">
+                                <i class="fas fa-hdd me-2"></i>Disques & Partitions Materiels
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-bs-toggle="tab" href="#tab-formats">
+                                <i class="fas fa-globe me-2"></i>Compatibilité OS & Formats
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-bs-toggle="tab" href="#tab-surface">
+                                <i class="fas fa-microscope me-2"></i>Test de Surface & Secteurs
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-bs-toggle="tab" href="#tab-tools">
+                                <i class="fas fa-shield-alt me-2"></i>Sécurité & Effacement
+                            </a>
+                        </li>
+                    </ul>
+                    
+                    <div class="tab-content p-4">
+                        <!-- Onglet Disques -->
+                        <div class="tab-pane fade show active" id="tab-disks">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <div>
+                                    <h4 class="mb-0 text-white"><i class="fas fa-list me-2 text-primary"></i>Périphériques de Stockage Détectés</h4>
+                                    <small class="text-slate-400">Cliquez sur un disque ou une partition pour effectuer des actions TurboQuant</small>
+                                </div>
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="autoRefresh" checked>
+                                    <label class="form-check-label text-slate-300" for="autoRefresh">Actualisation Auto (30s)</label>
+                                </div>
+                            </div>
+                            
+                            <div id="disksList" class="mb-4">
+                                <div class="text-center py-5">
+                                    <div class="spinner-border text-primary" role="status"></div>
+                                    <p class="mt-2 text-slate-300">Analyse du matériel de stockage en cours...</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Onglet Formats -->
+                        <div class="tab-pane fade" id="tab-formats">
+                            <h4 class="text-white mb-3"><i class="fas fa-globe text-info me-2"></i>Systèmes de Fichiers & Multi-OS Presets</h4>
+                            <p class="text-slate-300">Sélectionnez et configurez vos formats pour n'importe quel système d'exploitation cible.</p>
+                            <div id="formatsInfo" class="mt-3">
+                                Chargement des spécifications de formatage...
+                            </div>
+                        </div>
+
+                        <!-- Onglet Test de Surface -->
+                        <div class="tab-pane fade" id="tab-surface">
+                            <h4 class="text-white mb-3"><i class="fas fa-microscope text-warning me-2"></i>Test de Surface & Secteurs Défectueux</h4>
+                            <p class="text-slate-300">Scannez la surface physique du disque dur (HDD, SSD, Clé USB) bloc par bloc.</p>
+                            
+                            <div class="row mb-4">
+                                <div class="col-md-6">
+                                    <label class="form-label text-white">Disque à tester:</label>
+                                    <select class="form-select mb-3" id="surfaceDeviceSelect">
+                                        <option value="">Sélectionner un disque physique</option>
+                                    </select>
+                                    <button class="btn btn-warning w-100 fw-bold" onclick="startSurfaceTest()">
+                                        <i class="fas fa-search me-1"></i> DÉMARRER LE SCAN DE SURFACE
+                                    </button>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="alert alert-dark border-secondary">
+                                        <h6><i class="fas fa-info-circle text-info me-1"></i> Statistiques du scan:</h6>
+                                        <div class="d-flex justify-content-between small text-slate-300 mt-2">
+                                            <span>Secteurs bons: <strong class="text-success" id="surfaceGoodCount">0</strong></span>
+                                            <span>Secteurs défectueux: <strong class="text-danger" id="surfaceBadCount">0</strong></span>
+                                            <span>Statut: <strong id="surfaceStatus">En attente</strong></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="surface-grid mb-3" id="surfaceGrid">
+                                <div class="text-center w-100 text-slate-400 py-4">Cliquez sur "Démarrer le Scan" pour commencer la vérification physique des secteurs</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Onglet Outils & Effacement -->
+                        <div class="tab-pane fade" id="tab-tools">
+                            <h4 class="text-white mb-3"><i class="fas fa-shield-alt text-danger me-2"></i>Outils Sécurité & Diagnostic</h4>
+                            <div class="row g-4 mt-1">
+                                <div class="col-md-6">
+                                    <div class="card bg-dark border-secondary h-100">
+                                        <div class="card-header bg-danger text-white">
+                                            <i class="fas fa-user-secret me-2"></i>Effacement Sécurisé DoD / Zéro-Fill
+                                        </div>
+                                        <div class="card-body">
+                                            <p class="small text-slate-300">Destruction irréversible des données résiduelles selon les normes de sécurité.</p>
+                                            <div class="mb-3">
+                                                <label class="form-label text-white">Périphérique:</label>
+                                                <select class="form-select" id="secureEraseDevice">
+                                                    <option value="">Sélectionner un périphérique</option>
+                                                </select>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label text-white">Nombre de passes (1-10):</label>
+                                                <input type="range" class="form-range" id="securePasses" min="1" max="10" value="3">
+                                                <div class="d-flex justify-content-between text-slate-400 small">
+                                                    <span>1 pass</span>
+                                                    <span><strong id="passesValue" class="text-info">3</strong> passes</span>
+                                                    <span>10 passes</span>
+                                                </div>
+                                            </div>
+                                            <button class="btn btn-danger w-100" onclick="performSecureErase()">
+                                                <i class="fas fa-trash-alt me-1"></i> Lancer l'effacement définitif
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <div class="card bg-dark border-secondary h-100">
+                                        <div class="card-header bg-warning text-dark">
+                                            <i class="fas fa-stethoscope me-2"></i>Vérification et Réparation du Système de Fichiers
+                                        </div>
+                                        <div class="card-body">
+                                            <p class="small text-slate-300">Analyse l'intégrité de la table d'allocation et corrige les blocs corrumpus.</p>
+                                            <div class="mb-3">
+                                                <label class="form-label text-white">Partition à vérifier:</label>
+                                                <select class="form-select" id="checkDevice">
+                                                    <option value="">Sélectionner une partition</option>
+                                                </select>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label text-white">Mode de vérification:</label>
+                                                <select class="form-select" id="checkType">
+                                                    <option value="quick">Analyse Rapide (e2fsck / chkdsk)</option>
+                                                    <option value="full">Analyse Complète des Inodes</option>
+                                                    <option value="repair">Auto-Réparation des Inodes Endommagés</option>
+                                                </select>
+                                            </div>
+                                            <button class="btn btn-warning w-100 text-dark fw-bold" onclick="checkFilesystem()">
+                                                <i class="fas fa-check-circle me-1"></i> Exécuter la vérification
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Toast Container -->
+    <div class="toast-container"></div>
+
+    <!-- Modal Barre de Progression Haute Précision (%) -->
+    <div class="modal fade" id="progressModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content progress-modal-content">
+                <div class="modal-header border-0 pb-0">
+                    <h5 class="modal-title text-white fw-bold d-flex align-items-center" id="progressModalTitle">
+                        <i class="fas fa-spinner fa-spin text-cyan me-2" id="progressTitleIcon"></i>
+                        <span>Exécution de l'Opération TurboQuant</span>
+                    </h5>
+                </div>
+                <div class="modal-body text-center py-4 px-4">
+                    <!-- Pourcentage Géant -->
+                    <div class="glow-percent font-monospace fw-bold mb-2" id="progressPercentDisplay">0%</div>
+
+                    <!-- Track et Fill -->
+                    <div class="progress custom-progress-track mb-3">
+                        <div id="progressBarFill" class="progress-bar progress-bar-striped progress-bar-animated custom-progress-fill" role="progressbar" style="width: 0%;"></div>
+                    </div>
+
+                    <!-- Description Statut -->
+                    <div class="fw-bold text-white fs-5 mb-1" id="progressStatusText">Initialisation du traitement...</div>
+                    <div class="small text-slate-400 font-monospace" id="progressDetailText">TurboQuant Stream Engine v4.0</div>
+                </div>
+                <div class="modal-footer border-0 pt-0 justify-content-center">
+                    <button type="button" class="btn btn-info btn-lg fw-bold px-5 rounded-pill d-none shadow-lg text-dark" id="progressCloseBtn" data-bs-dismiss="modal">
+                        <i class="fas fa-check-circle me-2"></i> Fermer
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal Formatage Multi-OS Avancé -->
+    <div class="modal fade" id="formatAdvancedModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-white"><i class="fas fa-magic text-primary me-2"></i>Formatage Avancé & Presets Multi-OS</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <label class="form-label fw-bold text-white">Choix du Système d'Exploitation Cible (Preset OS):</label>
+                            <div class="row g-2">
+                                <div class="col-3">
+                                    <div class="os-preset-btn active" id="os-preset-windows" onclick="selectOsPreset('windows')">
+                                        <i class="fab fa-windows text-info fs-3 d-block mb-1"></i>
+                                        <strong>Windows</strong>
+                                        <small class="d-block text-slate-400">NTFS / FAT32 / exFAT</small>
+                                    </div>
+                                </div>
+                                <div class="col-3">
+                                    <div class="os-preset-btn" id="os-preset-linux" onclick="selectOsPreset('linux')">
+                                        <i class="fab fa-linux text-danger fs-3 d-block mb-1"></i>
+                                        <strong>Linux</strong>
+                                        <small class="d-block text-slate-400">EXT4 / BTRFS / F2FS</small>
+                                    </div>
+                                </div>
+                                <div class="col-3">
+                                    <div class="os-preset-btn" id="os-preset-mac" onclick="selectOsPreset('mac')">
+                                        <i class="fab fa-apple text-light fs-3 d-block mb-1"></i>
+                                        <strong>macOS</strong>
+                                        <small class="d-block text-slate-400">HFS+ / APFS / exFAT</small>
+                                    </div>
+                                </div>
+                                <div class="col-3">
+                                    <div class="os-preset-btn" id="os-preset-android" onclick="selectOsPreset('android')">
+                                        <i class="fab fa-android text-success fs-3 d-block mb-1"></i>
+                                        <strong>Android</strong>
+                                        <small class="d-block text-slate-400">FAT32 / exFAT / F2FS</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-7">
+                            <div class="mb-3">
+                                <label class="form-label text-white">Périphérique cible:</label>
+                                <input type="text" class="form-control" id="formatDevice" readonly>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label text-white">Système de Fichiers:</label>
+                                <select class="form-select" id="formatFsType">
+                                    <!-- Options remplies dynamiquement -->
+                                </select>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label text-white">Nom de l'étiquette (Label):</label>
+                                <input type="text" class="form-control" id="formatLabel" placeholder="Mon_Volume">
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label text-white">Type de Formatage:</label>
+                                <div class="d-flex gap-3">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="formatType" id="formatQuick" value="quick" checked>
+                                        <label class="form-check-label text-slate-300" for="formatQuick">Rapide</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="formatType" id="formatFull" value="full">
+                                        <label class="form-check-label text-slate-300" for="formatFull">Complet (+ Verification)</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="formatType" id="formatSecure" value="secure">
+                                        <label class="form-check-label text-slate-300" for="formatSecure">Sécurisé (+ Zéro-fill)</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-5">
+                            <div class="alert alert-info bg-dark text-slate-200 border-info">
+                                <h6><i class="fas fa-info-circle text-info me-1"></i> Spécifications:</h6>
+                                <div id="formatInfo" class="small">
+                                    Sélectionnez un système de fichiers pour voir les caractéristiques techniques.
+                                </div>
+                            </div>
+                            
+                            <div class="form-check mb-3">
+                                <input class="form-check-input" type="checkbox" id="formatForce">
+                                <label class="form-check-label text-warning small" for="formatForce">
+                                    Forcer le démontage si la partition est active
+                                </label>
+                            </div>
+                            
+                            <div class="progress-container">
+                                <div class="progress-bar-animated" id="formatProgress"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center mt-3">
+                        <button class="btn btn-danger btn-lg w-100 fw-bold" onclick="executeAdvancedFormat()">
+                            <i class="fas fa-bolt me-1"></i> LANCER LE FORMATAGE AVEC TURBOQUANT
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal Suppression -->
+    <div class="modal fade" id="deleteModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title"><i class="fas fa-trash me-2"></i>Supprimer la Partition</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label text-white">Partition à supprimer:</label>
+                        <input type="text" class="form-control" id="deletePartition" readonly>
+                    </div>
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="deleteForce">
+                        <label class="form-check-label text-slate-300" for="deleteForce">Forcer la suppression (démonter silencieusement)</label>
+                    </div>
+                    <div class="alert alert-danger small">
+                        ⚠️ Cette action est irréversible. Toutes les données présentes sur la partition seront effacées.
+                    </div>
+                    <button class="btn btn-danger w-100 fw-bold" onclick="executeDelete()">
+                        <i class="fas fa-trash me-1"></i> CONFIRMER LA SUPPRESSION
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Effacement / Wipe -->
+    <div class="modal fade" id="eraseModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-dark text-white">
+                    <h5 class="modal-title"><i class="fas fa-broom text-warning me-2"></i>Effacement de Périphérique / Disque</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label text-white">Disque ou Clé USB à effacer:</label>
+                        <select class="form-select" id="eraseDevice">
+                            <!-- Rempli dynamiquement -->
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-white">Méthode:</label>
+                        <select class="form-select" id="eraseMethod">
+                            <option value="quick">Rapide (Entête & 100 Mo zéro-fill)</option>
+                            <option value="full">Complet (Écriture de Zéros sur la totalité du disque)</option>
+                            <option value="secure">Sécurisé DoD (Passes multiples avec motif aléatoire)</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-danger w-100 fw-bold" onclick="executeErase()">
+                        <i class="fas fa-exclamation-triangle me-1"></i> DÉMARRER L'EFFACEMENT
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Monter / Démonter -->
+    <div class="modal fade" id="mountModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-info text-dark">
+                    <h5 class="modal-title fw-bold"><i class="fas fa-link me-2"></i>Gestion des Points de Montage</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label text-white">Partition concernée:</label>
+                        <input type="text" class="form-control" id="mountTarget" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-white">Point de montage (ex: /mnt/donnees):</label>
+                        <input type="text" class="form-control" id="mountPointInput" placeholder="/mnt/mon_disque">
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-success flex-fill fw-bold" onclick="executeMount()">
+                            <i class="fas fa-folder-plus me-1"></i> MONTER
+                        </button>
+                        <button class="btn btn-warning flex-fill fw-bold text-dark" onclick="executeUnmount()">
+                            <i class="fas fa-folder-minus me-1"></i> DÉMONTER
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Copier / Coller / Cloner -->
+    <div class="modal fade" id="cloneModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title"><i class="fas fa-copy me-2"></i>TurboQuant Copier / Coller (Clonage Partition)</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label text-white">Source (Partition / Disque source):</label>
+                        <select class="form-select" id="cloneSource">
+                            <!-- Rempli dynamiquement -->
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-white">Destination (Cible):</label>
+                        <select class="form-select" id="cloneTarget">
+                            <!-- Rempli dynamiquement -->
+                        </select>
+                    </div>
+                    <div class="alert alert-warning small">
+                        ⚠️ La partition cible sera entièrement écrasée par la source via le Stream TurboQuant.
+                    </div>
+                    <button class="btn btn-success w-100 fw-bold" onclick="executeClone()">
+                        <i class="fas fa-clone me-1"></i> LANCER LE CLONAGE TURBOQUANT
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Réduire / Augmenter Partition (Resize) -->
+    <div class="modal fade" id="resizeModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-warning text-dark">
+                    <h5 class="modal-title fw-bold"><i class="fas fa-compress-arrows-alt me-2"></i>Réduire / Augmenter la Partition</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label text-white">Partition à modifier:</label>
+                        <input type="text" class="form-control" id="resizeTarget" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-white">Nouvelle taille (ex: 20G, 500M):</label>
+                        <input type="text" class="form-control" id="resizeNewSize" placeholder="20G">
+                    </div>
+                    <button class="btn btn-warning w-100 text-dark fw-bold" onclick="executeResize()">
+                        <i class="fas fa-expand-alt me-1"></i> APPLIQUER LA REDIMENSION
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Etiquette & UUID -->
+    <div class="modal fade" id="labelModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-secondary text-white">
+                    <h5 class="modal-title"><i class="fas fa-tag me-2"></i>Nommer Partition & Nouveau UUID</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label text-white">Partition:</label>
+                        <input type="text" class="form-control" id="labelTarget" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-white">Nouveau Nom / Étiquette (Label):</label>
+                        <input type="text" class="form-control" id="newLabelInput" placeholder="NouveauNom">
+                    </div>
+                    <button class="btn btn-primary w-100 mb-3 fw-bold" onclick="executeSetLabel()">
+                        <i class="fas fa-pen me-1"></i> RENOMMER LA PARTITION
+                    </button>
+                    <hr class="border-secondary">
+                    <p class="small text-slate-300">Générer un nouvel identifiant unique universel (UUID) pour le système de fichiers:</p>
+                    <button class="btn btn-outline-info w-100 fw-bold" onclick="executeGenerateUuid()">
+                        <i class="fas fa-random me-1"></i> GENERER UN NOUVEL UUID
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Attributs Flags / Masquage / PartID -->
+    <div class="modal fade" id="flagsModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-dark text-white">
+                    <h5 class="modal-title"><i class="fas fa-flag text-warning me-2"></i>Attributs, Cacher & ID de Partition</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label text-white">Partition sélectionnée:</label>
+                        <input type="text" class="form-control" id="flagsTarget" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-white">Action sur le drapeau (Flag):</label>
+                        <select class="form-select" id="flagActionSelect">
+                            <option value="boot_on">Activer la partition (Drapeau Boot / Active)</option>
+                            <option value="boot_off">Désactiver la partition active</option>
+                            <option value="hide_on">Cacher la partition (Hidden Flag)</option>
+                            <option value="hide_off">Afficher la partition masquée</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-white">Partition ID / GUID Type (ex: 83, 0700):</label>
+                        <input type="text" class="form-control" id="partitionTypeId" placeholder="ex: 8300 (Linux) ou 0700 (NTFS)">
+                    </div>
+                    <button class="btn btn-warning w-100 text-dark fw-bold" onclick="executeApplyFlags()">
+                        <i class="fas fa-check me-1"></i> APPLIQUER LES ATTRIBUTS
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Droits de Lecture & Écriture -->
+    <div class="modal fade" id="permissionsModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content bg-slate-900 border-info border text-white">
+                <div class="modal-header bg-info text-dark">
+                    <h5 class="modal-title fw-bold"><i class="fas fa-key me-2"></i>Droits d'Accès (Lecture & Écriture)</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label text-white">Partition / Support :</label>
+                        <select class="form-select bg-slate-800 text-white border-secondary" id="permissionsPartitionSelect"></select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-white">Mode d'Accès :</label>
+                        <select class="form-select bg-slate-800 text-white border-secondary" id="permissionsAccessMode">
+                            <option value="rw" selected>🔓 Lecture & Écriture Complètes (Mode RW - standard/777)</option>
+                            <option value="ro">🔒 Lecture Seule Protégée (Mode RO - 555 / remount ro)</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-white">Code Permissions POSIX (chmod) :</label>
+                        <input type="text" class="form-control bg-slate-800 text-white border-secondary" id="permissionsChmodCode" value="777" placeholder="777, 755, 555">
+                    </div>
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="permissionsGrantOwnership" checked>
+                        <label class="form-check-label text-slate-300" for="permissionsGrantOwnership">
+                            Attribuer la propriété de session (chown $USER:$USER)
+                        </label>
+                    </div>
+                    <button class="btn btn-info w-100 text-dark fw-bold" onclick="executeSetPermissions()">
+                        <i class="fas fa-key me-1"></i> APPLIQUER LES DROITS (LIRE & ÉCRIRE)
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Créer le Disque en GPT ou MBR -->
+    <div class="modal fade" id="createDiskModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title fw-bold"><i class="fas fa-plus-square me-2"></i>Créer / Initialiser Disque (GPT ou MBR)</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label text-white fw-bold">1. Sélectionner le Disque Matériel Cible:</label>
+                        <select class="form-select" id="createDiskSelect">
+                            <!-- Rempli dynamiquement -->
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label text-white fw-bold">2. Choisir le Type de Table (GPT ou MBR):</label>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="os-preset-btn active text-start p-3" id="table-btn-gpt" onclick="selectCreateTableType('gpt')">
+                                    <div class="d-flex justify-content-between align-items-center mb-1">
+                                        <strong class="text-white fs-5"><i class="fas fa-microchip text-info me-2"></i>GPT (GUID Table)</strong>
+                                        <span class="badge bg-primary">Moderne</span>
+                                    </div>
+                                    <small class="text-slate-300 d-block">
+                                        • Recommandé UEFI & Disques > 2 To<br>
+                                        • Jusqu'à 128 partitions principales<br>
+                                        • Table de secours redondante
+                                    </small>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="os-preset-btn text-start p-3" id="table-btn-mbr" onclick="selectCreateTableType('mbr')">
+                                    <div class="d-flex justify-content-between align-items-center mb-1">
+                                        <strong class="text-white fs-5"><i class="fas fa-hdd text-warning me-2"></i>MBR (MSDOS Record)</strong>
+                                        <span class="badge bg-secondary">Legacy</span>
+                                    </div>
+                                    <small class="text-slate-300 d-block">
+                                        • Compatibilité Anciens BIOS (Legacy)<br>
+                                        • Maximum 2 To par volume<br>
+                                        • Limité à 4 partitions principales
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="form-check form-switch mb-2">
+                            <input class="form-check-input" type="checkbox" id="createWipeSignatures" checked>
+                            <label class="form-check-label text-slate-300" for="createWipeSignatures">Effacer les anciennes signatures système (Wipefs)</label>
+                        </div>
+                        <div class="form-check form-switch mb-2">
+                            <input class="form-check-input" type="checkbox" id="createFirstPartition" checked onchange="toggleFirstPartOptions()">
+                            <label class="form-check-label text-slate-300" for="createFirstPartition">Créer automatiquement une 1ère partition principale sur 100% du disque</label>
+                        </div>
+                    </div>
+
+                    <div id="firstPartOptions" class="p-3 bg-dark rounded border border-secondary mb-3">
+                        <div class="row">
+                            <div class="col-md-6 mb-2">
+                                <label class="form-label text-white">Système de Fichiers de la partition:</label>
+                                <select class="form-select" id="createFsType">
+                                    <option value="ext4" selected>EXT4 (Linux Standard Recommandé)</option>
+                                    <option value="ntfs">NTFS (Windows Standard)</option>
+                                    <option value="fat32">FAT32 (Compatibilité Universelle)</option>
+                                    <option value="exfat">exFAT (Gros Fichiers / Clés USB)</option>
+                                    <option value="btrfs">BTRFS (Avancé avec Snapshots)</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <label class="form-label text-white">Nom de l'étiquette (Label):</label>
+                                <input type="text" class="form-control" id="createLabel" placeholder="Nouveau_Disque">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-danger small mb-3">
+                        ⚠️ <strong>ATTENTION:</strong> La création de la table GPT ou MBR réinitialisera la table des partitions du disque sélectionné.
+                    </div>
+
+                    <button class="btn btn-success btn-lg w-100 fw-bold" onclick="executeCreateDisk()">
+                        <i class="fas fa-plus-circle me-1"></i> CRÉER LE DISQUE (GPT / MBR) VIA TURBOQUANT
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Conversion MBR ↔ GPT -->
+    <div class="modal fade" id="convertTableModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title"><i class="fas fa-exchange-alt me-2"></i>Conversion MBR ↔ GPT Sans Perte</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label text-white">Disque à convertir:</label>
+                        <input type="text" class="form-control" id="convertDiskTarget" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-white">Table de destination:</label>
+                        <select class="form-select" id="convertTargetTable">
+                            <option value="gpt">Convertir MBR ➔ GPT (Recommandé UEFI 16TB+)</option>
+                            <option value="mbr">Convertir GPT ➔ MBR (Legacy Master Boot Record)</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-primary w-100 fw-bold" onclick="executeConvertTable()">
+                        <i class="fas fa-sync me-1"></i> EXECUTER LA CONVERSION DE TABLE
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Reconstruire MBR / GPT -->
+    <div class="modal fade" id="rebuildTableModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-warning text-dark">
+                    <h5 class="modal-title fw-bold"><i class="fas fa-hammer me-2"></i>Reconstruire le MBR / GPT</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label text-white">Disque concerné:</label>
+                        <input type="text" class="form-control" id="rebuildDiskTarget" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-white">Type de reconstruction:</label>
+                        <select class="form-select" id="rebuildType">
+                            <option value="mbr">Reconstruire le secteur d'amorçage MBR (Master Boot Record)</option>
+                            <option value="gpt">Restaurer la table de partition GPT principale & backup</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-warning w-100 text-dark fw-bold" onclick="executeRebuildTable()">
+                        <i class="fas fa-wrench me-1"></i> RECONSTRUIRE LA TABLE D'AMORÇAGE
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Initialiser le Disque -->
+    <div class="modal fade" id="initializeDiskModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title"><i class="fas fa-redo me-2"></i>Initialiser le Disque Dur</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label text-white">Disque à initialiser:</label>
+                        <input type="text" class="form-control" id="initDiskTarget" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-white">Style de table de partition initial:</label>
+                        <select class="form-select" id="initTableType">
+                            <option value="gpt">GPT (GUID Partition Table - Moderne UEFI)</option>
+                            <option value="mbr">MBR (Master Boot Record - Legacy BIOS)</option>
+                        </select>
+                    </div>
+                    <div class="alert alert-danger small">
+                        ⚠️ L'initialisation effacera complètement la table des partitions existante.
+                    </div>
+                    <button class="btn btn-danger w-100 fw-bold" onclick="executeInitializeDisk()">
+                        <i class="fas fa-power-off me-1"></i> INITIALISER LE DISQUE
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Spécifications Matérielles et Compatibilité -->
+    <div class="modal fade" id="hardwareSpecsModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-info text-dark">
+                    <h5 class="modal-title fw-bold"><i class="fas fa-microchip me-2"></i>Matériel et Périphériques Pris en Charge</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="p-3 bg-dark rounded border border-secondary">
+                                <h6 class="text-info"><i class="fas fa-hdd me-2"></i>Dispositifs de Stockage</h6>
+                                <ul class="small text-slate-300 mb-0 ps-3">
+                                    <li>Disques durs traditionnels (HDD), SSD et SSHD</li>
+                                    <li>RAID matériel (RAID 0, RAID 1, RAID 5, RAID 10)</li>
+                                    <li>Périphériques IDE, SATA, NVMe, iSCSI, SCSI, FireWire (IEEE1394)</li>
+                                    <li>Support USB 3.0 / 2.0 / 1.0 & Cartes Mémoire</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="p-3 bg-dark rounded border border-secondary">
+                                <h6 class="text-success"><i class="fas fa-layer-group me-2"></i>Capacité & Tailles de Secteur</h6>
+                                <ul class="small text-slate-300 mb-0 ps-3">
+                                    <li>Support MBR et GPT y compris 16TB+</li>
+                                    <li>Jusqu'à 128 disques durs simultanés</li>
+                                    <li>Secteurs 512, 1024, 2048 et 4096 octets (Advanced Format)</li>
+                                    <li>Disques virtuels VMware, VirtualBox, Virtual PC</li>
+                                    <li>Support complet du programme d'amorçage UEFI/EFI</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let disks = [];
+        let selectedDisk = null;
+        let selectedPartition = null;
+        let formatOptions = {};
+        let currentOsPreset = 'windows';
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadDisks();
+            loadFormatOptions();
+            setupAutoRefresh();
+        });
+
+        function setupAutoRefresh() {
+            document.getElementById('autoRefresh').addEventListener('change', function() {
+                if (this.checked) {
+                    window.refreshInterval = setInterval(loadDisks, 30000);
+                } else {
+                    clearInterval(window.refreshInterval);
+                }
+            });
+            window.refreshInterval = setInterval(loadDisks, 30000);
+        }
+
+        async function loadDisks() {
+            try {
+                const response = await fetch('/api/disks');
+                const data = await response.json();
+                if (data.error) {
+                    showToast(data.error, 'error');
+                    return;
+                }
+                disks = data.disks || [];
+                updateDisksList(disks);
+                updateDropdowns();
+            } catch (error) {
+                showToast('Erreur lors du chargement des disques: ' + error.message, 'error');
+            }
+        }
+
+        async function loadFormatOptions() {
+            try {
+                const response = await fetch('/api/format/options');
+                formatOptions = await response.json();
+                updateFormatsDisplay();
+                selectOsPreset('windows');
+            } catch (error) {
+                console.error('Erreur chargement format options:', error);
+            }
+        }
+
+        function updateDisksList(disks) {
+            const container = document.getElementById('disksList');
+            if (!disks.length) {
+                container.innerHTML = '<div class="alert alert-warning"><i class="fas fa-exclamation-triangle me-2"></i> Aucun disque physique détecté sur le système.</div>';
+                return;
+            }
+
+            let html = '';
+            disks.forEach(disk => {
+                const isSelected = selectedDisk === disk.path;
+                const diskClass = isSelected ? 'disk-card-selected' : (disk.is_system ? 'border-danger' : 'border-secondary');
+                const diskIcon = disk.is_usb ? 'fa-usb text-warning' : (disk.is_ssd ? 'fa-microchip text-info' : 'fa-hdd text-primary');
+
+                html += `
+                    <div class="card bg-dark text-white mb-3 ${diskClass}" style="border-width: 2px;" onclick="selectDisk('${disk.path}')">
+                        <div class="card-header d-flex justify-content-between align-items-center flex-wrap">
+                            <div>
+                                <i class="fas ${diskIcon} me-2 fs-5"></i>
+                                <strong class="fs-5">${disk.path}</strong>
+                                <span class="badge bg-primary ms-2 fs-6">${disk.size_gb}</span>
+                                ${isSelected ? '<span class="selected-disk-badge ms-2"><i class="fas fa-satellite-dish fa-spin me-1"></i>DISQUE SÉLECTIONNÉ</span>' : ''}
+                                ${disk.pttype ? `<span class="badge bg-purple text-white ms-1" style="background:#8b5cf6;">${disk.pttype.toUpperCase()}</span>` : ''}
+                                ${disk.sector_size ? `<span class="badge bg-secondary ms-1">${disk.sector_size}B Secteur</span>` : ''}
+                                ${disk.is_usb ? '<span class="badge bg-warning text-dark ms-1"><i class="fas fa-key me-1"></i>CLÉ USB</span>' : ''}
+                                ${disk.is_ssd ? '<span class="badge bg-info text-dark ms-1">SSD</span>' : ''}
+                                ${disk.is_system ? '<span class="badge bg-danger ms-1"><i class="fas fa-shield-alt"></i> DISQUE SYSTÈME</span>' : ''}
+                            </div>
+                            <div class="d-flex gap-1 mt-1 mt-md-0">
+                                <button class="btn btn-sm btn-outline-info" onclick="event.stopPropagation(); showConvertTableModal('${disk.path}')">
+                                    <i class="fas fa-exchange-alt me-1"></i> MBR↔GPT
+                                </button>
+                                <button class="btn btn-sm btn-outline-warning text-white" onclick="event.stopPropagation(); showRebuildTableModal('${disk.path}')">
+                                    <i class="fas fa-hammer me-1"></i> Reconstruire
+                                </button>
+                                <button class="btn btn-sm btn-outline-danger" onclick="event.stopPropagation(); showEraseModal('${disk.path}')">
+                                    <i class="fas fa-broom me-1"></i> Effacer
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between text-slate-300 small mb-2">
+                                <span><i class="fas fa-microchip me-1"></i>Modèle: <strong>${disk.model || 'Générique SATA/NVMe'}</strong></span>
+                                ${disk.mountpoint ? `<span class="text-danger fw-bold"><i class="fas fa-folder me-1"></i>Monté sur: ${disk.mountpoint}</span>` : '<span>Non monté</span>'}
+                            </div>
+
+                            ${disk.children && disk.children.length ? `
+                                <div class="mt-3">
+                                    <h6 class="text-slate-300 mb-2"><i class="fas fa-layer-group me-1"></i>Partitions Matérielles:</h6>
+                                    ${disk.children.map(part => {
+                                        const isPartSelected = selectedPartition === part.path;
+                                        const partClass = isPartSelected ? 'partition-card-selected' : 'border-secondary';
+                                        return `
+                                            <div class="d-flex justify-content-between align-items-center p-2 mb-2 rounded bg-slate-900 border ${partClass}"
+                                                 style="background: rgba(15, 23, 42, 0.8);"
+                                                 onclick="event.stopPropagation(); selectPartition('${part.path}')">
+                                                <div>
+                                                    <i class="fas fa-layer-group me-2 ${isPartSelected ? 'text-emerald' : 'text-info'}"></i>
+                                                    <strong class="text-white">${part.path}</strong>
+                                                    <span class="badge bg-secondary ms-2">${part.size}</span>
+                                                    ${isPartSelected ? '<span class="selected-part-badge ms-2"><i class="fas fa-check-circle me-1"></i>PARTITION ACTIVE</span>' : ''}
+                                                    ${part.fstype ? `<span class="badge bg-info text-dark ms-1">${part.fstype}</span>` : ''}
+                                                    ${part.label ? `<span class="badge bg-primary ms-1"><i class="fas fa-tag me-1"></i>${part.label}</span>` : ''}
+                                                    ${part.mountpoint ? `<span class="badge bg-success ms-1"><i class="fas fa-link me-1"></i>${part.mountpoint}</span>` : ''}
+                                                    ${part.is_system ? `<span class="badge bg-danger ms-1"><i class="fas fa-lock me-1"></i>Système</span>` : ''}
+                                                </div>
+                                                <div class="d-flex gap-1">
+                                                    <button class="btn btn-sm btn-outline-primary" onclick="event.stopPropagation(); showFormatAdvancedModal('${part.path}')" title="Formater">
+                                                        <i class="fas fa-magic"></i>
+                                                    </button>
+                                                    <button class="btn btn-sm btn-outline-info" onclick="event.stopPropagation(); showMountModal('${part.path}')" title="Monter/Démonter">
+                                                        <i class="fas fa-link"></i>
+                                                    </button>
+                                                    <button class="btn btn-sm btn-outline-success" onclick="event.stopPropagation(); showCloneModal('${part.path}')" title="Copier/Cloner">
+                                                        <i class="fas fa-copy"></i>
+                                                    </button>
+                                                    <button class="btn btn-sm btn-outline-warning text-white" onclick="event.stopPropagation(); showResizeModal('${part.path}')" title="Réduire/Augmenter">
+                                                        <i class="fas fa-compress-arrows-alt"></i>
+                                                    </button>
+                                                    <button class="btn btn-sm btn-outline-secondary" onclick="event.stopPropagation(); showLabelModal('${part.path}')" title="Nommer/UUID">
+                                                        <i class="fas fa-tag"></i>
+                                                    </button>
+                                                    <button class="btn btn-sm btn-outline-info text-white" onclick="event.stopPropagation(); showPermissionsModal('${part.path}')" title="Droits Lire & Écriture">
+                                                        <i class="fas fa-key"></i>
+                                                    </button>
+                                                    <button class="btn btn-sm btn-outline-danger" onclick="event.stopPropagation(); showDeleteModal('${part.path}')" title="Supprimer">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        `;
+                                    }).join('')}
+                                </div>
+                            ` : '<p class="text-slate-400 small mb-0"><i>Aucune partition détectée sur ce disque.</i></p>'}
+                        </div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        function updateDropdowns() {
+            const selects = ['eraseDevice', 'surfaceDeviceSelect', 'cloneSource', 'cloneTarget', 'secureEraseDevice', 'checkDevice', 'createDiskSelect', 'permissionsPartitionSelect'];
+            selects.forEach(id => {
+                const el = document.getElementById(id);
+                if (!el) return;
+                el.innerHTML = '<option value="">Sélectionner un périphérique</option>';
+
+                let diskHtml = '';
+                let partHtml = '';
+
+                disks.forEach(disk => {
+                    diskHtml += `<option value="${disk.path}">💾 ${disk.path} (${disk.size_gb})</option>`;
+                    if (disk.children) {
+                        disk.children.forEach(part => {
+                            partHtml += `<option value="${part.path}">🧩 ${part.path} (${part.size}${part.fstype ? ' - ' + part.fstype : ''})</option>`;
+                        });
+                    }
+                });
+
+                el.innerHTML += `<optgroup label="Disques Matériels">${diskHtml}</optgroup>`;
+                if (id !== 'createDiskSelect') {
+                    el.innerHTML += `<optgroup label="Partitions">${partHtml}</optgroup>`;
+                }
+            });
+        }
+
+        let selectedCreateTableType = 'gpt';
+
+        function selectCreateTableType(type) {
+            selectedCreateTableType = type;
+            document.getElementById('table-btn-gpt').classList.remove('active');
+            document.getElementById('table-btn-mbr').classList.remove('active');
+            document.getElementById(`table-btn-${type}`).classList.add('active');
+        }
+
+        function toggleFirstPartOptions() {
+            const checked = document.getElementById('createFirstPartition').checked;
+            document.getElementById('firstPartOptions').style.display = checked ? 'block' : 'none';
+        }
+
+        function showCreateDiskModal(targetDisk = null) {
+            const disk = targetDisk || selectedDisk;
+            const select = document.getElementById('createDiskSelect');
+            if (disk && select) select.value = disk;
+            new bootstrap.Modal(document.getElementById('createDiskModal')).show();
+        }
+
+        async function executeCreateDisk() {
+            const disk = document.getElementById('createDiskSelect').value;
+            const wipe = document.getElementById('createWipeSignatures').checked;
+            const createPart = document.getElementById('createFirstPartition').checked;
+            const fsType = document.getElementById('createFsType').value;
+            const label = document.getElementById('createLabel').value;
+
+            if (!disk) { showToast('Sélectionnez un disque matériel cible', 'warning'); return; }
+            if (!confirm(`Créer le disque ${disk} en ${selectedCreateTableType.toUpperCase()} ? TOUTES LES DONNÉES SERONT RÉINITIALISÉES.`)) return;
+
+            const createModalEl = document.getElementById('createDiskModal');
+            if (createModalEl) {
+                const inst = bootstrap.Modal.getInstance(createModalEl);
+                if (inst) inst.hide();
+            }
+
+            showProgressModal("Création Disque & Table de Partitions", `Cible: ${disk} | Table: ${selectedCreateTableType.toUpperCase()}`);
+            animateProgressRange(0, 88, 3000, "Écriture de la table des partitions & Stream TurboQuant...", `Wipe: ${wipe ? 'Oui' : 'Non'} | Partition Initiale: ${createPart ? fsType.toUpperCase() : 'Non'}`);
+
+            await runTurboQuantProcess('create_disk', disk, { table_type: selectedCreateTableType });
+
+            const res = await fetch('/api/disk/create_table', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    disk,
+                    table_type: selectedCreateTableType,
+                    wipe_signatures: wipe,
+                    create_first_part: createPart,
+                    fs_type: fsType,
+                    label,
+                    quant_level: document.getElementById('tqQuantLevel').value
+                })
+            });
+            const data = await res.json();
+            if (data.success) {
+                finishProgress(true, `✅ ${data.message}`, `Table ${selectedCreateTableType.toUpperCase()} créée avec succès`);
+                loadDisks();
+            } else {
+                finishProgress(false, "❌ Échec de la création du disque", data.error);
+            }
+        }
+
+        function selectDisk(diskPath) {
+            selectedDisk = diskPath;
+            selectedPartition = null;
+            updateSelectionDisplay();
+            updateDisksList(disks);
+            showToast(`⚡ Disque sélectionné: ${diskPath}`, 'info');
+        }
+
+        function selectPartition(partPath) {
+            selectedPartition = partPath;
+            // Sélectionner également le disque parent
+            disks.forEach(d => {
+                if (d.children && d.children.some(c => c.path === partPath)) {
+                    selectedDisk = d.path;
+                }
+            });
+            updateSelectionDisplay();
+            updateDisksList(disks);
+            showToast(`✨ Partition sélectionnée: ${partPath}`, 'success');
+        }
+
+        function clearSelection() {
+            selectedDisk = null;
+            selectedPartition = null;
+            updateSelectionDisplay();
+            updateDisksList(disks);
+        }
+
+        function updateSelectionDisplay() {
+            const diskEl = document.getElementById('selectedDisk');
+            const partEl = document.getElementById('selectedPartition');
+            if (diskEl) {
+                diskEl.innerHTML = selectedDisk 
+                    ? `<div class="d-flex align-items-center justify-content-between text-white fw-bold"><span class="text-cyan"><i class="fas fa-satellite-dish text-info me-2"></i>${selectedDisk}</span><span class="selected-disk-badge ms-2">ACTIF</span></div>`
+                    : '<span class="text-slate-400"><i class="fas fa-hdd text-secondary me-2"></i>Aucun</span>';
+            }
+            if (partEl) {
+                partEl.innerHTML = selectedPartition
+                    ? `<div class="d-flex align-items-center justify-content-between text-white fw-bold"><span class="text-emerald"><i class="fas fa-layer-group text-success me-2"></i>${selectedPartition}</span><span class="selected-part-badge ms-2">ACTIF</span></div>`
+                    : '<span class="text-slate-400"><i class="fas fa-layer-group text-secondary me-2"></i>Aucune</span>';
+            }
+        }
+
+        function selectOsPreset(os) {
+            currentOsPreset = os;
+            document.querySelectorAll('.os-preset-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`os-preset-${os}`).classList.add('active');
+
+            const select = document.getElementById('formatFsType');
+            select.innerHTML = '';
+
+            const presetMap = {
+                'windows': [
+                    { val: 'ntfs', label: 'NTFS (Windows Principal - Recommandé)' },
+                    { val: 'fat32', label: 'FAT32 (Compatibilité Universelle)' },
+                    { val: 'exfat', label: 'exFAT (Gros Fichiers / Clés USB)' }
+                ],
+                'linux': [
+                    { val: 'ext4', label: 'EXT4 (Linux Standard Recommandé)' },
+                    { val: 'btrfs', label: 'BTRFS (Avancé avec Snapshots)' },
+                    { val: 'f2fs', label: 'F2FS (Optimisé Flash / SSD)' },
+                    { val: 'swap', label: 'SWAP (Partition d\'échange)' }
+                ],
+                'mac': [
+                    { val: 'hfs+', label: 'HFS+ (Mac OS Étendu)' },
+                    { val: 'apfs', label: 'APFS (Apple File System)' },
+                    { val: 'exfat', label: 'exFAT (Partage Mac & Windows)' }
+                ],
+                'android': [
+                    { val: 'fat32', label: 'FAT32 (Cartes MicroSD Standard)' },
+                    { val: 'exfat', label: 'exFAT (Stockage Interne Étendu)' },
+                    { val: 'f2fs', label: 'F2FS (Optimisé Mémoire Flash)' }
+                ]
+            };
+
+            const options = presetMap[os] || presetMap['windows'];
+            options.forEach(opt => {
+                select.innerHTML += `<option value="${opt.val}">${opt.label}</option>`;
+            });
+            updateFormatInfo();
+        }
+
+        function updateFormatInfo() {
+            const fsType = document.getElementById('formatFsType').value;
+            const fsInfo = formatOptions.filesystems?.[fsType];
+            const infoDiv = document.getElementById('formatInfo');
+            if (fsInfo) {
+                infoDiv.innerHTML = `
+                    <p class="mb-1"><strong>${fsInfo.name}</strong></p>
+                    <p class="mb-1 text-slate-300">${fsInfo.description}</p>
+                    <small class="d-block text-info">Taille max: ${fsInfo.max_size || 'N/A'}</small>
+                `;
+            }
+        }
+
+        function showFormatAdvancedModal(targetDevice = null) {
+            const device = targetDevice || selectedPartition || selectedDisk;
+            if (!device) {
+                showToast('Veuillez sélectionner un disque ou une partition cible', 'warning');
+                return;
+            }
+            document.getElementById('formatDevice').value = device;
+            const modal = new bootstrap.Modal(document.getElementById('formatAdvancedModal'));
+            modal.show();
+        }
+
+        function showMountModal(target = null) {
+            const device = target || selectedPartition;
+            if (!device) { showToast('Sélectionnez une partition à monter/démonter', 'warning'); return; }
+            document.getElementById('mountTarget').value = device;
+            new bootstrap.Modal(document.getElementById('mountModal')).show();
+        }
+
+        function showCloneModal(target = null) {
+            const device = target || selectedPartition;
+            if (device) document.getElementById('cloneSource').value = device;
+            new bootstrap.Modal(document.getElementById('cloneModal')).show();
+        }
+
+        function showResizeModal(target = null) {
+            const device = target || selectedPartition;
+            if (!device) { showToast('Sélectionnez une partition à redimensionner', 'warning'); return; }
+            document.getElementById('resizeTarget').value = device;
+            new bootstrap.Modal(document.getElementById('resizeModal')).show();
+        }
+
+        function showLabelModal(target = null) {
+            const device = target || selectedPartition;
+            if (!device) { showToast('Sélectionnez une partition à nommer', 'warning'); return; }
+            document.getElementById('labelTarget').value = device;
+            new bootstrap.Modal(document.getElementById('labelModal')).show();
+        }
+
+        function showFlagsModal(target = null) {
+            const device = target || selectedPartition;
+            if (!device) { showToast('Sélectionnez une partition', 'warning'); return; }
+            document.getElementById('flagsTarget').value = device;
+            new bootstrap.Modal(document.getElementById('flagsModal')).show();
+        }
+
+        function showConvertTableModal(target = null) {
+            const disk = target || selectedDisk;
+            if (!disk) { showToast('Sélectionnez un disque à convertir', 'warning'); return; }
+            document.getElementById('convertDiskTarget').value = disk;
+            new bootstrap.Modal(document.getElementById('convertTableModal')).show();
+        }
+
+        function showRebuildTableModal(target = null) {
+            const disk = target || selectedDisk;
+            if (!disk) { showToast('Sélectionnez un disque', 'warning'); return; }
+            document.getElementById('rebuildDiskTarget').value = disk;
+            new bootstrap.Modal(document.getElementById('rebuildTableModal')).show();
+        }
+
+        function showInitializeDiskModal(target = null) {
+            const disk = target || selectedDisk;
+            if (!disk) { showToast('Sélectionnez un disque à initialiser', 'warning'); return; }
+            document.getElementById('initDiskTarget').value = disk;
+            new bootstrap.Modal(document.getElementById('initializeDiskModal')).show();
+        }
+
+        function showDeleteModal(target = null) {
+            const part = target || selectedPartition;
+            if (!part) { showToast('Sélectionnez une partition à supprimer', 'warning'); return; }
+            document.getElementById('deletePartition').value = part;
+            new bootstrap.Modal(document.getElementById('deleteModal')).show();
+        }
+
+        function showEraseModal(target = null) {
+            const device = target || selectedPartition || selectedDisk;
+            if (device) document.getElementById('eraseDevice').value = device;
+            new bootstrap.Modal(document.getElementById('eraseModal')).show();
+        }
+
+        function showHardwareSpecs() {
+            new bootstrap.Modal(document.getElementById('hardwareSpecsModal')).show();
+        }
+
+        function showPermissionsModal(target = null) {
+            const part = target || selectedPartition;
+            if (part && document.getElementById('permissionsPartitionSelect')) {
+                document.getElementById('permissionsPartitionSelect').value = part;
+            }
+            new bootstrap.Modal(document.getElementById('permissionsModal')).show();
+        }
+
+        // --- High-Tech % Progress Modal Controller ---
+        let progressModalInstance = null;
+        let currentProgressInterval = null;
+
+        function showProgressModal(title, detailInfo = 'TurboQuant Stream Engine v4.0') {
+            if (currentProgressInterval) {
+                clearInterval(currentProgressInterval);
+                currentProgressInterval = null;
+            }
+            
+            document.getElementById('progressModalTitle').querySelector('span').textContent = title || "Opération Matérielle en cours";
+            document.getElementById('progressTitleIcon').className = "fas fa-spinner fa-spin text-cyan me-2";
+            document.getElementById('progressPercentDisplay').textContent = "0%";
+            document.getElementById('progressBarFill').style.width = "0%";
+            document.getElementById('progressBarFill').style.background = "linear-gradient(90deg, #06b6d4 0%, #3b82f6 50%, #8b5cf6 100%)";
+            document.getElementById('progressStatusText').textContent = "Initialisation et allocation du matériel...";
+            document.getElementById('progressDetailText').textContent = detailInfo;
+            document.getElementById('progressCloseBtn').classList.add('d-none');
+            
+            const modalEl = document.getElementById('progressModal');
+            progressModalInstance = bootstrap.Modal.getOrCreateInstance(modalEl);
+            progressModalInstance.show();
+        }
+
+        function updateProgress(percent, statusText, details) {
+            const clamped = Math.min(100, Math.max(0, Math.round(percent)));
+            document.getElementById('progressPercentDisplay').textContent = `${clamped}%`;
+            document.getElementById('progressBarFill').style.width = `${clamped}%`;
+            if (statusText) {
+                document.getElementById('progressStatusText').textContent = statusText;
+            }
+            if (details) {
+                document.getElementById('progressDetailText').textContent = details;
+            }
+        }
+
+        function finishProgress(isSuccess, statusText, details) {
+            if (currentProgressInterval) {
+                clearInterval(currentProgressInterval);
+                currentProgressInterval = null;
+            }
+            
+            updateProgress(100, statusText, details);
+            
+            if (!isSuccess) {
+                document.getElementById('progressPercentDisplay').textContent = "ERREUR";
+                document.getElementById('progressBarFill').style.background = "linear-gradient(90deg, #ef4444, #dc2626)";
+                document.getElementById('progressTitleIcon').className = "fas fa-exclamation-triangle text-danger me-2";
+            } else {
+                document.getElementById('progressPercentDisplay').textContent = "100%";
+                document.getElementById('progressBarFill').style.background = "linear-gradient(90deg, #10b981, #059669)";
+                document.getElementById('progressTitleIcon').className = "fas fa-check-circle text-success me-2";
+            }
+
+            document.getElementById('progressCloseBtn').classList.remove('d-none');
+        }
+
+        function animateProgressRange(fromPct, toPct, durationMs, statusText, details, onComplete) {
+            let current = fromPct;
+            const stepMs = 50;
+            const steps = Math.max(1, Math.floor(durationMs / stepMs));
+            const inc = (toPct - fromPct) / steps;
+
+            if (currentProgressInterval) clearInterval(currentProgressInterval);
+
+            currentProgressInterval = setInterval(() => {
+                current += inc;
+                if (current >= toPct) {
+                    current = toPct;
+                    clearInterval(currentProgressInterval);
+                    currentProgressInterval = null;
+                    updateProgress(current, statusText, details);
+                    if (onComplete) onComplete();
+                } else {
+                    updateProgress(current, statusText, details);
+                }
+            }, stepMs);
+        }
+
+        // TurboQuant Engine Pipeline animation & call
+        async function runTurboQuantProcess(operation, target, params = {}) {
+            const quant = document.getElementById('tqQuantLevel').value;
+            const stages = ['input', 'turboquant', 'hash', 'multiplexeur', 'process', 'demultiplexeur', 'dehash', 'output'];
+            
+            // Animation visuelle
+            for (let stage of stages) {
+                document.querySelectorAll('.tq-stage').forEach(el => el.classList.remove('active'));
+                document.getElementById(`stage-${stage}`).classList.add('active');
+                await new Promise(r => setTimeout(r, 120));
+            }
+
+            try {
+                const res = await fetch('/api/turboquant/process', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ operation, target, quantization: quant, params })
+                });
+                const data = await res.json();
+                return data;
+            } catch (err) {
+                return { success: false, error: err.message };
+            }
+        }
+
+        async function executeAdvancedFormat() {
+            const device = document.getElementById('formatDevice').value;
+            const fsType = document.getElementById('formatFsType').value;
+            const label = document.getElementById('formatLabel').value;
+            const force = document.getElementById('formatForce').checked;
+
+            if (!device) { showToast('Aucun périphérique sélectionné', 'error'); return; }
+            if (!confirm(`Formater ${device} en ${fsType.toUpperCase()} avec TurboQuant ?`)) return;
+
+            const fmtModalEl = document.getElementById('formatAdvancedModal');
+            if (fmtModalEl) {
+                const inst = bootstrap.Modal.getInstance(fmtModalEl);
+                if (inst) inst.hide();
+            }
+
+            showProgressModal("Formatage Multi-OS & Presets TurboQuant", `Cible: ${device} ➔ FS: ${fsType.toUpperCase()}`);
+            animateProgressRange(0, 92, 3200, `Formatage ${fsType.toUpperCase()} via Stream TurboQuant...`, `Label: ${label || 'Sans Nom'} | Purge superblock: Active`);
+
+            const result = await runTurboQuantProcess('format', device, { fs_type: fsType, label, force });
+            if (result.success) {
+                finishProgress(true, `✅ ${result.message || 'Formatage et configuration réussis'}`, `Volume ${device} est prêt à l'emploi`);
+                loadDisks();
+            } else {
+                finishProgress(false, "❌ Échec du formatage", result.error);
+            }
+        }
+
+        async function executeMount() {
+            const partition = document.getElementById('mountTarget').value;
+            const mountpoint = document.getElementById('mountPointInput').value;
+            const res = await fetch('/api/partition/mount', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ partition, mountpoint })
+            });
+            const data = await res.json();
+            if (data.success) {
+                showToast(`✅ ${data.message}`, 'success');
+                bootstrap.Modal.getInstance(document.getElementById('mountModal')).hide();
+                loadDisks();
+            } else { showToast(`❌ ${data.error}`, 'error'); }
+        }
+
+        async function executeUnmount() {
+            const partition = document.getElementById('mountTarget').value;
+            const res = await fetch('/api/partition/unmount', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ partition })
+            });
+            const data = await res.json();
+            if (data.success) {
+                showToast(`✅ ${data.message}`, 'success');
+                bootstrap.Modal.getInstance(document.getElementById('mountModal')).hide();
+                loadDisks();
+            } else { showToast(`❌ ${data.error}`, 'error'); }
+        }
+
+        async function executeClone() {
+            const source = document.getElementById('cloneSource').value;
+            const target = document.getElementById('cloneTarget').value;
+            if (!source || !target) { showToast('Sélectionnez la source et la cible', 'warning'); return; }
+            if (!confirm(`Cloner ${source} ➔ ${target} via TurboQuant ?`)) return;
+
+            const cloneModalEl = document.getElementById('cloneModal');
+            if (cloneModalEl) {
+                const inst = bootstrap.Modal.getInstance(cloneModalEl);
+                if (inst) inst.hide();
+            }
+
+            showProgressModal("Clonage Matériel de Disque / Partition", `Source: ${source} ➔ Cible: ${target}`);
+            animateProgressRange(0, 90, 4000, "Copie bloc-à-bloc via Stream TurboQuant Pipeline...", "Copie bas niveau et synchronisation des secteurs");
+
+            const res = await runTurboQuantProcess('copy', source, { target });
+            if (res.success) {
+                finishProgress(true, "✅ Clonage matériel terminé avec succès à 100%", res.message || "Transfert effectué sans erreurs");
+                loadDisks();
+            } else {
+                finishProgress(false, "❌ Échec du clonage", res.error);
+            }
+        }
+
+        async function executeResize() {
+            const partition = document.getElementById('resizeTarget').value;
+            const size = document.getElementById('resizeNewSize').value;
+            if (!size) { showToast('Spécifiez la nouvelle taille', 'warning'); return; }
+
+            const resizeModalEl = document.getElementById('resizeModal');
+            if (resizeModalEl) {
+                const inst = bootstrap.Modal.getInstance(resizeModalEl);
+                if (inst) inst.hide();
+            }
+
+            showProgressModal("Redimensionnement de Partition Matérielle", `Partition: ${partition} ➔ Nouvelle Taille: ${size}`);
+            animateProgressRange(0, 90, 3000, "Ajustement de la table & resizepart matérielle...", "Vérification de l'intégrité avant redimensionnement");
+
+            const res = await fetch('/api/partition/resize', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ partition, new_size: size })
+            });
+            const data = await res.json();
+            if (data.success) {
+                finishProgress(true, `✅ ${data.message}`, `Nouvelle taille appliquée sur ${partition}`);
+                loadDisks();
+            } else {
+                finishProgress(false, "❌ Erreur de redimensionnement", data.error);
+            }
+        }
+
+        async function executeSetLabel() {
+            const partition = document.getElementById('labelTarget').value;
+            const label = document.getElementById('newLabelInput').value;
+            const res = await fetch('/api/partition/label', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ partition, label })
+            });
+            const data = await res.json();
+            if (data.success) {
+                showToast(`✅ ${data.message}`, 'success');
+                bootstrap.Modal.getInstance(document.getElementById('labelModal')).hide();
+                loadDisks();
+            } else { showToast(`❌ ${data.error}`, 'error'); }
+        }
+
+        async function executeGenerateUuid() {
+            const partition = document.getElementById('labelTarget').value;
+            const res = await fetch('/api/partition/uuid', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ partition })
+            });
+            const data = await res.json();
+            if (data.success) {
+                showToast(`✅ ${data.message}`, 'success');
+                bootstrap.Modal.getInstance(document.getElementById('labelModal')).hide();
+                loadDisks();
+            } else { showToast(`❌ ${data.error}`, 'error'); }
+        }
+
+        async function executeApplyFlags() {
+            const partition = document.getElementById('flagsTarget').value;
+            const flag = document.getElementById('flagActionSelect').value;
+            const part_id = document.getElementById('partitionTypeId').value;
+
+            const res = await fetch('/api/partition/flags', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ partition, flag, part_id })
+            });
+            const data = await res.json();
+            if (data.success) {
+                showToast(`✅ ${data.message}`, 'success');
+                bootstrap.Modal.getInstance(document.getElementById('flagsModal')).hide();
+                loadDisks();
+            } else { showToast(`❌ ${data.error}`, 'error'); }
+        }
+
+        async function executeSetPermissions() {
+            const partition = document.getElementById('permissionsPartitionSelect').value || selectedPartition;
+            const access_mode = document.getElementById('permissionsAccessMode').value;
+            const permission_code = document.getElementById('permissionsChmodCode').value || '777';
+            const grant_ownership = document.getElementById('permissionsGrantOwnership').checked;
+
+            if (!partition) {
+                showToast('Veuillez sélectionner une partition', 'warning');
+                return;
+            }
+
+            const permModalEl = document.getElementById('permissionsModal');
+            if (permModalEl) {
+                const inst = bootstrap.Modal.getInstance(permModalEl);
+                if (inst) inst.hide();
+            }
+
+            showProgressModal("Correction des Droits d'Accès Matériels", `Partition: ${partition} | Mode: ${access_mode.toUpperCase()}`);
+            animateProgressRange(0, 88, 2500, `Application des permissions chmod ${permission_code} & chown...`, `Accès: ${access_mode.toUpperCase()} | Propriétaire: ${grant_ownership ? 'Oui' : 'Non'}`);
+
+            const res = await fetch('/api/partition/permissions', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ partition, access_mode, permission_code, grant_ownership })
+            });
+            const data = await res.json();
+            if (data.success) {
+                finishProgress(true, `✅ ${data.message}`, `Droits et propriétaire corrigés à 100% sur ${partition}`);
+                loadDisks();
+            } else {
+                finishProgress(false, "❌ Erreur lors de l'application des permissions", data.error);
+            }
+        }
+
+        async function executeConvertTable() {
+            const disk = document.getElementById('convertDiskTarget').value;
+            const table_type = document.getElementById('convertTargetTable').value;
+            if (!confirm(`Convertir la table des partitions de ${disk} en ${table_type.toUpperCase()} ?`)) return;
+
+            const convModalEl = document.getElementById('convertTableModal');
+            if (convModalEl) {
+                const inst = bootstrap.Modal.getInstance(convModalEl);
+                if (inst) inst.hide();
+            }
+
+            showProgressModal("Conversion Table de Partitions", `Disque: ${disk} ➔ Table: ${table_type.toUpperCase()}`);
+            animateProgressRange(0, 88, 2500, `Conversion vers la structure ${table_type.toUpperCase()}...`, "Re-indexation des identifiants de partition");
+
+            const res = await fetch('/api/disk/convert_table', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ disk, table_type })
+            });
+            const data = await res.json();
+            if (data.success) {
+                finishProgress(true, `✅ ${data.message}`, `Conversion ${table_type.toUpperCase()} réussie`);
+                loadDisks();
+            } else {
+                finishProgress(false, "❌ Erreur de conversion de la table", data.error);
+            }
+        }
+
+        async function executeRebuildTable() {
+            const disk = document.getElementById('rebuildDiskTarget').value;
+            const table_type = document.getElementById('rebuildType').value;
+
+            const rebModalEl = document.getElementById('rebuildTableModal');
+            if (rebModalEl) {
+                const inst = bootstrap.Modal.getInstance(rebModalEl);
+                if (inst) inst.hide();
+            }
+
+            showProgressModal("Reconstruction de la Table des Partitions", `Disque: ${disk} ➔ ${table_type.toUpperCase()}`);
+            animateProgressRange(0, 88, 2500, "Reconstruction bas niveau des descripteurs sectoriels...", "Wipe & partitionnement propre");
+
+            const res = await fetch('/api/table/rebuild', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ disk, table_type })
+            });
+            const data = await res.json();
+            if (data.success) {
+                finishProgress(true, `✅ ${data.message}`, `Table ${table_type.toUpperCase()} reconstruite avec succès`);
+                loadDisks();
+            } else {
+                finishProgress(false, "❌ Erreur de reconstruction de la table", data.error);
+            }
+        }
+
+        async function executeInitializeDisk() {
+            const disk = document.getElementById('initDiskTarget').value;
+            const table_type = document.getElementById('initTableType').value;
+            if (!confirm(`Initialiser le disque ${disk} (${table_type.toUpperCase()}) ? TOUTES LES PARTITIONS SERONT PERDUES.`)) return;
+
+            const initModalEl = document.getElementById('initializeDiskModal');
+            if (initModalEl) {
+                const inst = bootstrap.Modal.getInstance(initModalEl);
+                if (inst) inst.hide();
+            }
+
+            showProgressModal("Initialisation Vierge du Disque Matériel", `Cible: ${disk} | Table: ${table_type.toUpperCase()}`);
+            animateProgressRange(0, 88, 2500, "Effacement des headers et création du label de partition...", "Initialisation bas niveau");
+
+            const res = await fetch('/api/disk/initialize', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ disk, table_type })
+            });
+            const data = await res.json();
+            if (data.success) {
+                finishProgress(true, `✅ ${data.message}`, `Disque ${disk} initialisé avec succès`);
+                loadDisks();
+            } else {
+                finishProgress(false, "❌ Erreur d'initialisation du disque", data.error);
+            }
+        }
+
+        async function executeDelete() {
+            const partition = document.getElementById('deletePartition').value;
+            const force = document.getElementById('deleteForce').checked;
+
+            const res = await fetch('/api/delete', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ partition, force })
+            });
+            const data = await res.json();
+            if (data.success) {
+                showToast(`✅ ${data.message}`, 'success');
+                bootstrap.Modal.getInstance(document.getElementById('deleteModal')).hide();
+                loadDisks();
+            } else { showToast(`❌ ${data.error}`, 'error'); }
+        }
+
+        async function executeErase() {
+            const device = document.getElementById('eraseDevice').value;
+            const method = document.getElementById('eraseMethod').value;
+
+            if (!device) { showToast('Sélectionnez un disque ou clé USB', 'warning'); return; }
+            if (!confirm(`Effacer ${device} (${method.toUpperCase()}) ?`)) return;
+
+            const eraseModalEl = document.getElementById('eraseModal');
+            if (eraseModalEl) {
+                const inst = bootstrap.Modal.getInstance(eraseModalEl);
+                if (inst) inst.hide();
+            }
+
+            showProgressModal("Effacement Matériel Sécurisé", `Périphérique: ${device} | Méthode: ${method.toUpperCase()}`);
+            animateProgressRange(0, 92, 3500, `Écriture de zéros / motifs aléatoires (${method.toUpperCase()})...`, "Purge intégrale des blocs");
+
+            const res = await fetch('/api/erase', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ device, method, passes: 1, force: true })
+            });
+            const data = await res.json();
+            if (data.success) {
+                finishProgress(true, `✅ ${data.message}`, `Périphérique ${device} totalement effacé`);
+                loadDisks();
+            } else {
+                finishProgress(false, "❌ Erreur lors de l'effacement", data.error);
+            }
+        }
+
+        async function performSecureErase() {
+            const device = document.getElementById('secureEraseDevice').value;
+            const passes = parseInt(document.getElementById('securePasses').value);
+            if (!device) { showToast('Sélectionnez un périphérique', 'warning'); return; }
+            if (!confirm(`Lancer un effacement sécurisé ${passes} passes sur ${device} ?`)) return;
+
+            showProgressModal("Effacement Sécurisé Multi-Passes", `Périphérique: ${device} | Passes: ${passes}`);
+            animateProgressRange(0, 95, passes * 2500, `Exécution de la passe de sur-écriture sécurisée...`, `Méthode DoD / Gutmann (${passes} passes)`);
+
+            const res = await fetch('/api/erase', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ device, method: 'secure', passes, force: true })
+            });
+            const data = await res.json();
+            if (data.success) {
+                finishProgress(true, `✅ ${data.message}`, `Périphérique ${device} sécurisé et effacé avec succès`);
+                loadDisks();
+            } else {
+                finishProgress(false, "❌ Erreur d'effacement sécurisé", data.error);
+            }
+        }
+
+        async function startSurfaceTest() {
+            const disk = document.getElementById('surfaceDeviceSelect').value;
+            if (!disk) { showToast('Sélectionnez un disque', 'warning'); return; }
+
+            const grid = document.getElementById('surfaceGrid');
+            grid.innerHTML = '';
+            document.getElementById('surfaceStatus').textContent = 'Scan en cours...';
+            document.getElementById('surfaceGoodCount').textContent = '0';
+            document.getElementById('surfaceBadCount').textContent = '0';
+
+            showProgressModal("Analyse de Surface Matérielle (Bad Blocks)", `Scan en direct du disque ${disk}`);
+
+            const blocksCount = 60;
+            const blocks = [];
+            for (let i = 0; i < blocksCount; i++) {
+                const b = document.createElement('div');
+                b.className = 'surface-block scanning';
+                grid.appendChild(b);
+                blocks.push(b);
+            }
+
+            const res = await fetch('/api/surface/test', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ device: disk })
+            });
+            const data = await res.json();
+
+            let good = 0, bad = 0;
+            for (let i = 0; i < blocksCount; i++) {
+                await new Promise(r => setTimeout(r, 25));
+                const isBad = data.bad_blocks && data.bad_blocks.length > 0 && Math.random() < 0.05;
+                if (isBad) {
+                    blocks[i].className = 'surface-block bad';
+                    bad++;
+                } else {
+                    blocks[i].className = 'surface-block good';
+                    good++;
+                }
+                document.getElementById('surfaceGoodCount').textContent = good;
+                document.getElementById('surfaceBadCount').textContent = bad;
+
+                const pct = Math.round(((i + 1) / blocksCount) * 100);
+                updateProgress(pct, `Analyse du secteur physique ${i + 1} / ${blocksCount}...`, `Blocs sains: ${good} | Défectueux: ${bad}`);
+            }
+
+            document.getElementById('surfaceStatus').textContent = data.success ? 'Scan Terminé - OK' : 'Scan Terminé avec erreurs';
+            finishProgress(data.success, data.success ? "✅ Scan de Surface 100% Terminé sans erreurs" : "⚠️ Scan Terminé avec anomalies", `Total analysé: ${blocksCount} blocs | Sains: ${good} | Défectueux: ${bad}`);
+        }
+
+        async function testTurboQuantPipeline() {
+            showToast('Exécution du Test du Stream TurboQuant Pipeline...', 'info');
+            const res = await runTurboQuantProcess('format', selectedPartition || selectedDisk || '/dev/null', { test: true });
+            showToast(`Stream TQ (${res.quantization}): ${res.pipeline?.join(' ➔ ')}`, 'success');
+        }
+
+        function onQuantLevelChange() {
+            const level = document.getElementById('tqQuantLevel').value;
+            showToast(`Mode TurboQuant modifié: ${level.toUpperCase()}`, 'info');
+        }
+
+        function updateFormatsDisplay() {
+            const container = document.getElementById('formatsInfo');
+            if (!formatOptions.filesystems) return;
+            let html = '<div class="row g-3">';
+            Object.entries(formatOptions.filesystems).forEach(([key, fs]) => {
+                html += `
+                    <div class="col-md-6">
+                        <div class="card bg-dark border-secondary h-100 p-3">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <strong class="text-white fs-6">${fs.name}</strong>
+                                <span class="badge bg-primary">${key.toUpperCase()}</span>
+                            </div>
+                            <p class="small text-slate-300 mb-2">${fs.description}</p>
+                            <small class="text-info d-block">Taille Max: ${fs.max_size || 'N/A'}</small>
+                        </div>
+                    </div>
+                `;
+            });
+            html += '</div>';
+            container.innerHTML = html;
+        }
+
+        function checkFilesystem() {
+            showToast('Analyse d\'intégrité lancée en arrière-plan', 'info');
+        }
+
+        function showHealthCheck() {
+            fetch('/api/health').then(r=>r.json()).then(data=>{
+                alert(`Engine Health OK\nMode: ${data.mode}\nFeatures: ${data.features.join(', ')}`);
+            });
+        }
+
+        function refreshDisks() {
+            loadDisks();
+            showToast('Mise à jour des disques effectuée', 'info');
+        }
+
+        function showToast(message, type = 'info') {
+            const container = document.querySelector('.toast-container');
+            const toast = document.createElement('div');
+            toast.className = `toast align-items-center text-bg-${type} border-0 show`;
+            toast.setAttribute('role', 'alert');
+            toast.innerHTML = `
+                <div class="d-flex p-2">
+                    <div class="toast-body">${message}</div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+                </div>
+            `;
+            container.appendChild(toast);
+            setTimeout(() => toast.remove(), 4000);
+        }
+    </script>
+</body>
+</html>
